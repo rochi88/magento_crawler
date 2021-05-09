@@ -50,14 +50,24 @@ class DomainSpider(CrawlSpider):
     # Rename this from `parse_item` to `parse` and comment out the `rules` above to crawl just a single url
     def parse_item(self, response):
         for body in response.css('body'):
+            images = []
             # Don't log non-product urls
             if not body.css('body.catalog-product-view .price-box .price::text').get():
                 continue
+            for image in body.css('img::attr(src)').extract():
+                images.append(image)
             yield {
                 # TODO: Update CSS selector to match SKU, if the site you're crawling outputs the SKU
-                #'sku': body.css('[itemprop="sku"]::text').get(),
-                'price': body.css('.price-box .price::text').get().strip().replace(",","").replace("£",""),
+                # 'sku': body.css('[itemprop="sku"]::text').get(),
+                'sku': body.css('.sku::text').extract(),
+                # 'price': body.css('.price-box .price::text').get().strip().replace(",","").replace("£",""),
+                'specialprice': body.css('.price-box .special-price .price::text').get().strip().replace(",","").replace("£",""),
+                'price': body.css('.price-box .old-price .price::text').get().strip().replace(",","").replace("£",""),
                 'name': body.css('.product .base::text').get(),
+                # 'description': body.css('[itemprop="description"] .value::text').get(),
+                # 'images': body.css('.product .fotorama__stage__frame div::attr(href)').get(),
+                # 'images': body.css('.fotorama__img img::attr(src)').get(),
                 'url': response.url,
-                'image url': body.css('img::attr(src)').get()
+                'image url': images,
+
             }
