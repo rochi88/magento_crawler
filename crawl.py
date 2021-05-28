@@ -38,9 +38,13 @@ from scrapy.spiders import CrawlSpider, Rule
 
 class DomainSpider(CrawlSpider):
     name = 'roguefitness'
-    allowed_domains = ["dreamfurnishings.co.uk"]
+    # allowed_domains = ["dreamfurnishings.co.uk"]
+    # # Start the crawl with a known product detail page so that you can tweak the `yield` queries below before crawling the entire site
+    # start_urls = ['https://dreamfurnishings.co.uk/luxury-furnitures']
+
+    allowed_domains = ["www.example.com"]
     # Start the crawl with a known product detail page so that you can tweak the `yield` queries below before crawling the entire site
-    start_urls = ['https://dreamfurnishings.co.uk/luxury-furnitures']
+    start_urls = ['https://www.example.com/example-product']
 
     # If you only want to crawl a subfolder, then change the `allow=r'/'` string to something like `allow=r'/en'`
     rules = (
